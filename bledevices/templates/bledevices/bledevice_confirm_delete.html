@@ -1,0 +1,12 @@
+{% extends "base_nav.html" %}
+{% block content %}
+<div class="d-flex flex-column align-items-center" style="width:100%;">
+  <h1>Delete BLE Device</h1>
+    <p>Are you sure you want to delete the device: {{ bledevice }}?</p>
+    <br>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <input type="submit" value="Yes, delete.">
+    </form>
+</div>
+{% endblock %}

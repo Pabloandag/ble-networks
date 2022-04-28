@@ -1,0 +1,50 @@
+{% extends "base_nav.html" %}
+{% load humanize %}
+{% block content %}
+<h1 class="text-center">BLE Devices</h1>
+{% if bledevice_list %}
+<div class="row d-flex justify-content-center">
+  {% for bledevice in bledevice_list %}
+  <div class="col-md-6 col-lg-4 col-xl-3 py-2">
+  <div {% if bledevice.active %} class = "card h-100 text-white bg-success mb-3" {% else %} class="card h-100 text-white bg-secondary mb-3" {% endif %}">
+    <div class="card-header bg-transparent">{{bledevice.network.name}}</div>
+    <div class="card-body">
+      <h5 class="card-text text-center">{{ bledevice.friendly_name}}</h5>
+      <p class="card-text"> <strong>Identifier</strong>: {{ bledevice.identifier }} <br>
+        <strong>MAC</strong>: {{ bledevice.mac }} <br>
+        <strong>Type</strong>: {{ bledevice.device_type }}</p>
+        <a href="{% url 'bledevices:bledevice_detail' bledevice.id %}" class="btn btn-light">Detail</a>
+        <a href="#" onclick="toggle.call(this,event,'{% url 'bledevices:bledevice_toggle' bledevice.id %}')" class="btn btn-light">Toggle</a>
+        <a href="{% url 'bledevices:bledevice_delete' bledevice.id %}" class="btn btn-light">Remove</a>
+    </div>
+    <div class="card-footer">
+      <small class="text-white">Last updated {{ bledevice.updated_at | naturaltime }}</small>
+    </div>
+  </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+  <p class="text-center">There are no BLE devices in the database.</p>
+{% endif %}
+{% endblock %}
+{% block footer %}
+<script>
+  function toggle(event,url) {
+    event.preventDefault();
+    $.post(url, {},  function(rowz){
+    }).fail(function(xhr) {
+        alert('Url failed with '+xhr.status+' '+url);
+    });
+    parentCard = $(this).closest(".card");
+    if (parentCard.hasClass("bg-secondary")){
+      parentCard.removeClass("bg-secondary");
+      parentCard.addClass("bg-success");
+    }
+    else{
+      parentCard.removeClass("bg-success");
+      parentCard.addClass("bg-secondary");
+    }
+}
+</script>
+{% endblock footer%}

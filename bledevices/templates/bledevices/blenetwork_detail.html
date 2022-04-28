@@ -1,0 +1,60 @@
+{% extends "base_nav.html" %}
+{% load humanize %}
+{% block content %}
+<span style="float: right;">
+{% if blenetwork.owner == user %}
+<a href="{% url 'bledevices:blenetwork_update' blenetwork.id %}"><i class="fa fa-pencil"></i></a>
+<a href="{% url 'bledevices:blenetwork_delete' blenetwork.id %}"><i class="fa fa-trash"></i></a>
+{% endif %}
+</span>
+<h1 class="text-center">{{ blenetwork.name }}</h1>
+<p>
+</p>
+<p>
+{% if connected_devices %}
+<div class="container">
+    <div class="row">
+        {% for device in connected_devices %}
+        <div class="col-md-6 col-lg-4 col-xl-3 py-2">
+            <div {% if device.active %} class = "card h-100 text-white bg-success mb-3" {% else %} class="card h-100 text-white bg-secondary mb-3" {% endif %}">
+                <div class="card-header bg-transparent">{{device.network.name}}</div>
+                <div class="card-body">
+                    <h5 class="card-text text-center">{{ device.friendly_name}}</h5>
+                    <p class="card-text">   <strong>Identifier</strong>: {{ device.identifier }} <br>
+                                            <strong>MAC</strong>: {{ device.mac }} <br>
+                                            <strong>Type</strong>: {{ device.device_type }}</p>
+                    <div class="text-center">
+                        <a href="{% url 'bledevices:bledevice_detail' device.id %}" class="btn btn-light">Detail</a>
+                        <a href="#" class="btn btn-light" onclick="toggle.call(this,event,'{% url 'bledevices:bledevice_toggle' device.id %}', {{ device.id }}); return false;"> Toggle </a>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-white">Last updated {{ device.updated_at | naturaltime }}</small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+    <p class="text-center">There are no BLE devices in this network.</p>
+{% endif %}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    function toggle(event,url,pk) {
+        $.post(url).fail(function(xhr) {
+        alert('Url failed with '+xhr.status+' '+url);
+        });
+        card = $(this).closest('.card')
+        if(card.hasClass('bg-success')){
+            card.removeClass('bg-success');
+            card.addClass('bg-secondary');
+        }
+        else{
+            card.removeClass('bg-secondary');
+            card.addClass('bg-success');
+        }
+    }
+</script>
+{% endblock %}

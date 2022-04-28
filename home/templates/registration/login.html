@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'home/signin.css' %}">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% endblock %}
+{% block content %}
+{% if form.errors %}
+  <p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+<div class="container">
+<form class="form-signin" method="post" action="{% url 'login' %}">
+    <img class="mb-4" src="{% static 'home/link-image.png' %}" alt="" width="72" height="72" >
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    {% csrf_token %}
+    <!--{{ form.as_p }}-->
+    <label for="{{ form.username.id_for_label }}" class="sr-only"> Username </label>
+    <input type="text" name="username" id="input-user" class="form-control" placeholder="Username" autocapitalize="none" autocomplete="username" maxlength="150" required autofocus>
+    <label for="{{ form.password.id_for_label }}" class="sr-only">Password</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" autocomplete="current-password" required>
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" value="remember-me"> Remember me
+        </label>
+    </div>
+    
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2022</p>
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+</div>
+<!-- <form class="form-signin"  method="post" action="{% url 'login' %}">-->
+<!--     <img class="mb-4" src="{% static 'home/link-image.png' %}" alt="" width="72" height="72">-->
+<!--     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>-->
+<!--     <label for="inputEmail" class="sr-only">Email address</label>-->
+<!--     <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>-->
+<!--     <label for="inputPassword" class="sr-only">Password</label>-->
+<!--     <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>-->
+<!--     <div class="checkbox mb-3">-->
+<!--       <label>-->
+<!--         <input type="checkbox" value="remember-me"> Remember me-->
+<!--       </label>-->
+<!--     </div>-->
+<!--     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>-->
+<!--     <p class="mt-5 mb-3 text-muted">&copy; 2022</p>-->
+<!--   </form> -->
+{% endblock %}

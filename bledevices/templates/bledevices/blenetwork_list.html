@@ -1,0 +1,33 @@
+{% extends "base_nav.html" %}
+{% load humanize %}
+{% block content %}
+<div class="container" style="flex-direction: column;">
+<h1 class="text-center">BLE Networks</h1>
+{% if blenetwork_list %}
+<div class="container">
+  <div class="row d-flex justify-content-center">
+    {% for blenetwork in blenetwork_list %}
+    <div class="col-md-6 col-lg-4 col-xl-3 py-2">
+    <div {% if not blenetwork.active %} class="card h-100 text-white bg-secondary mb-3" {% elif blenetwork.is_fully_functional %} class = "card h-100 text-white bg-success mb-3" {% else %} class = "card h-100 bg-warning mb-3" {% endif %}">
+      <div class="card-body">
+        <h5 class="card-text text-center">{{ blenetwork.name}}</h5>
+        <p class="card-text"> 
+          <strong>Location</strong>: {{ blenetwork.location }} <br>
+          <strong>Devices</strong>: {{ blenetwork.device_count }}
+          </p>
+          <a href="{% url 'bledevices:network_detail' blenetwork.id %}" class="btn btn-light">Detail</a>
+      </div>
+      <div class="card-footer">
+        <small {% if blenetwork.active and not blenetwork.is_fully_functional %}class="text-black"{% else %}class="text-white"{% endif %}>Last updated {{ blenetwork.updated_at | naturaltime }}</small>
+      </div>
+    </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+</div>
+{% else %}
+  <p>There are no BLE devices in the database.</p>
+{% endif %}
+</main>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends "base_nav.html" %}
+{% load humanize %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<style>
+    .ChartShadow {
+  -webkit-filter: drop-shadow(0px 20px 8px rgba(0, 0, 0, 0.2));
+          filter: drop-shadow(0px 20px 8px rgba(0, 0, 0, 0.2));
+    }
+    .card .card-block, .card .card-body {
+    padding: 30px 25px;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{% static 'bledevices/css/morris.css' %}">
+{% endblock head %}
+{% block main_page %}
+    <h1 class="text-center">BLE Home</h1>
+    <!-- Presentation start-->
+    <div class="row">
+    <div class="col-xl-4 col-md-6">
+        <div class="card" style="margin-bottom: 30px;">
+            <div class="card-block border-bottom">
+                <a href="{% url 'bledevices:all' %}" style="text-decoration:none;color:black;">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-auto">
+                            <i class="feather icon-cpu" style="font-size:30px;color:var(--bs-blue)"></i>
+                        </div>
+                        <div class="col">
+                            <h3>{{dev_count}}</h3>
+                            <span class="d-block text-uppercase text-muted">TOTAL DEVICES</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="card-block border-bottom">
+                <a href="{% url 'bledevices:network_all' %}" style="text-decoration:none;color:black;">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-auto">
+                            <i class="feather icon-wifi" style="font-size:30px;color:var(--bs-blue)"></i>
+                        </div>
+                        <div class="col">
+                            <h3>{{network_count}}</h3>
+                            <span class="d-block text-uppercase text-muted">TOTAL NETWORKS</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="card-block">
+                <a href="{% url 'bledevices:all' %}" style="text-decoration:none;color:black;">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-auto">
+                            <i class="feather icon-alert-circle" style="font-size:30px;color:var(--bs-red)"></i>
+                        </div>
+                        <div class="col">
+                            <h3>{{inactive_dev_count}}</h3>
+                            <span class="d-block text-uppercase text-muted">INACTIVE DEVICES</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-block border-bottom">
+                <div class="row d-flex align-items-center">
+                    <div class="col-auto">
+                        <i class="feather icon-map-pin" style="font-size:30px;color:var(--bs-blue)"></i>
+                    </div>
+                    <div class="col">
+                        <h3>{{network_count}}</h3>
+                        <span class="d-block text-uppercase text-muted">LOCATIONS</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-block border-bottom">
+                <a href="{% url 'bledevices:network_all' %}" style="text-decoration:none;color:black;">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-auto">
+                            <i class="feather icon-alert-triangle" style="font-size:30px;color:var(--bs-yellow)"></i>
+                        </div>
+                        <div class="col">
+                            <h3>{{not_fully_functional_network_count}}</h3>
+                            <span class="d-block text-uppercase text-muted">MALFUNCTIONING NETWORKS</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-xl-8 col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Devices Measurements</h5>
+            </div>
+            <h5 class="text-center"> Temperature </h5>
+            <div class="card-block px-0 py-3">
+                <div id="temp-chart" class="ChartShadow" style="height:300px"></div>
+            </div>
+            <h5 class="text-center"> Humidity </h5>
+            <div class="card-block px-0 py-3">
+                <div id="hum-chart" class="ChartShadow" style="height:300px"></div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block footer  %}
+<script src="{% static 'bledevices/js/raphael.min.js' %}"></script>
+<script src="{% static 'bledevices/js/morris.min.js' %}"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        setTimeout(function() {
+            Morris.Line({
+            element: 'temp-chart',
+            data: {{temp_data | safe}},
+            xkey: 'time',
+            redraw: true,
+            resize: true,
+            ykeys: {{ temp_dev_names | safe }},
+            hideHover: 'auto',
+            responsive:true,
+            labels: {{ temp_dev_names | safe }},
+            xlabels: 'day',
+            });
+            Morris.Line({
+            element: 'hum-chart',
+            data: {{hum_data | safe}},
+            xkey: 'time',
+            redraw: true,
+            resize: true,
+            ykeys: {{ hum_dev_names | safe }},
+            hideHover: 'auto',
+            responsive:true,
+            labels: {{ hum_dev_names | safe }},
+            xlabels: 'day',
+            });
+        }, 700);
+    });
+</script>
+{% endblock footer %}

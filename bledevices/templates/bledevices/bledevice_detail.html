@@ -1,0 +1,147 @@
+{% extends "base_nav.html" %}
+{% load humanize %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<style>
+    .ChartShadow {
+  -webkit-filter: drop-shadow(0px 20px 8px rgba(0, 0, 0, 0.2));
+          filter: drop-shadow(0px 20px 8px rgba(0, 0, 0, 0.2));
+    }
+    .info-text {
+        font-weight: 300;
+        font-size: 1.1rem;
+    }
+    .info-title{
+        font-weight: 500;
+        font-size: 0.8rem;
+    }
+    .card .card-block, .card .card-body {
+    padding: 30px 25px;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{% static 'bledevices/css/morris.css' %}">
+{% endblock head %}
+{% block content %}
+<div class="container" style="flex-direction: column;">
+<span style="float: right;">
+({{ bledevice.updated_at|naturaltime }})
+{% if bledevice.owner == user %}
+<a href="{% url 'bledevices:bledevice_update' bledevice.id %}"><i class="fa fa-pencil"></i></a>
+<a href="{% url 'bledevices:bledevice_delete' bledevice.id %}"><i class="fa fa-trash"></i></a>
+{% endif %}
+</span>
+<br>
+<h1 class="text-center">{{ bledevice.friendly_name }}</h1>
+
+<div class="row">
+    <!-- Device info -->
+    <div class="col-xl-5 col-md-12">
+        <div class="card h-100" style="margin-bottom: 30px;">
+            <div class="card-header">
+                <h5> Device info </h5>
+            </div>
+            <div class="card-block border-bottom">
+                <div class="row">
+                    <div class="col">
+                        <div class="row d-flex align-items-center">
+                            <div class="col-auto">
+                                <i class="feather icon-user" style="font-size:30px;color:var(--bs-blue)"></i>
+                            </div>
+                            <div class="col">
+                                <h3 class="info-text">{{bledevice.identifier}}</h3>
+                                <span class="d-block text-uppercase info-title text-muted">DEVICE IDENTIFIER</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row d-flex align-items-center">
+                            <div class="col-auto">
+                                <i class="feather icon-help-circle" style="font-size:30px;color:var(--bs-blue)"></i>
+                            </div>
+                            <div class="col">
+                                <h3 class="info-text">{{bledevice.device_type}}</h3>
+                                <span class="d-block text-uppercase info-title text-muted">DEVICE TYPE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col">
+                        <a href="{% url 'bledevices:network_detail' bledevice.network.id %}" style="text-decoration:none;color:black;">
+                            <div class="row d-flex align-items-center">
+                                <div class="col-auto">
+                                    <i class="feather icon-wifi" style="font-size:30px;color:var(--bs-blue)"></i>
+                                </div>
+                                <div class="col">
+                                    <h3 class="info-text">{{bledevice.network.name}}</h3>
+                                    <span class="d-block text-uppercase info-title text-muted">NETWORK NAME</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <div class="row d-flex align-items-center">
+                            <div class="col-auto">
+                                <i class="feather icon-server" style="font-size:30px;color:var(--bs-blue)"></i>
+                            </div>
+                            <div class="col">
+                                <h3 class="info-text">{{bledevice.mac}}</h3>
+                                <span class="d-block text-uppercase info-title text-muted">DEVICE MAC</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Device Measurements -->
+    <div class="col-xl-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5> Device measurements </h5>
+            </div>
+            <div class="card-block">
+                <div class="text-center">
+                    <h6> {{bledevice.get_data_type}} </h6>
+                </div>
+                <div id="morris-line-smooth-chart" class="ChartShadow" style="height:300px"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block footer%}
+<script src="{% static 'bledevices/js/raphael.min.js' %}"></script>
+<script src="{% static 'bledevices/js/morris.min.js' %}"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    function toggle(url,pk) {
+        $.post(url).fail(function(xhr) {
+        alert('Url failed with '+xhr.status+' '+url);
+        });
+    }
+</script>
+<script>
+    $(document).ready(function() {
+        setTimeout(function() {
+            Morris.Line({
+            element: 'morris-line-smooth-chart',
+            data: {{bledevice.get_data | safe}},
+            xkey: 'time',
+            redraw: true,
+            resize: true,
+            ykeys: ['{{bledevice.friendly_name}}'],
+            hideHover: 'auto',
+            responsive:true,
+            labels: ['{{bledevice.friendly_name}}'],
+            lineColors: ['#0d6efd', '#A389D4']
+            });
+        }, 700);
+    });
+</script>
+{% endblock %}
