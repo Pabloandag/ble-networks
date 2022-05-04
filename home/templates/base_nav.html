@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
 {% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'bledevices/sidebars.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'bledevices/css/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'home/fonts/feather/css/feather.css' %}">
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="{% static 'favicon.png' %}">
 {% endblock %}
+
 {% block navbar %}
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="bootstrap" viewBox="0 0 118 94">
@@ -70,7 +77,7 @@
     </symbol>
 </svg>
 
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
+<div class="d-none d-sm-flex flex-column flex-shrink-0 p-3 text-white dark" style="width: 280px;">
     <a href="{% url 'bledevices:home' %}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
       <i class="feather icon-bluetooth me-2 ms-2" style="font-size:30px;"></i>
       <span class="fs-4"> BLE Networks</span>
@@ -131,10 +138,75 @@
       </a>
     {% endif %}
 </div>
-<div class="b-example-divider" style="width:0.1rem;"></div>
+
+<nav class="navbar navbar-dark fixed-top navbar-expand-lg d-sm-none dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'bledevices:home' %}">BLE Networks</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarToggler">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 fs-4">
+        <li class="nav-item justify-content-center">
+          <a href="{% url 'bledevices:home' %}" {% if request.path ==  home_url %} class="nav-link active"{% else %}class="nav-link text-white"{% endif %} aria-current="page">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+            Home
+        </a>
+        </li>
+        <li>
+          <a href="{% url 'bledevices:network_all' %}"  class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#wifi"/></svg>
+            Networks
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'bledevices:all' %}" class="nav-link text-white">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#cpu"/></svg>
+            Devices
+          </a>
+        </li>
+        <li>
+          <a href="#manage-top-collapse" class="nav-link collapsed text-white" data-bs-toggle="collapse" data-bs-target="#manage-top-collapse">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#gear-fill"/></svg>
+            Manage
+          </a>
+          <div class="collapse rounded ms-4" id="manage-top-collapse">
+            <ul class="btn-toggle-nav list-unstyled small dropdown-menu-end">
+              <li><a href="{% url 'bledevices:bledevice_create' %}" class="nav-link text-white">Add BLE Device </a></li>
+              <li><a href="{% url 'bledevices:network_create' %}" class="nav-link text-white">Add Network </a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+      
+      {% if user.is_authenticated %}
+      <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://static.wikia.nocookie.net/zelda/images/2/26/Link_Artwork_LAR.png/revision/latest/scale-to-width-down/893?cb=20191015020845&path-prefix=es" alt="" width="32" height="32" class="rounded-circle me-2">
+          <strong>{{user.username}}</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+          <!--
+          <li><a class="dropdown-item" href="#">New project...</a></li>
+          <li><a class="dropdown-item" href="#">Settings</a></li>
+          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li><hr class="dropdown-divider"></li>-->
+          <li><a class="dropdown-item" href="{% url 'logout' %}?next={% url 'bledevices:all' %}">Sign out</a></li>
+        </ul>
+      </div>
+      {% else %}
+      <a class="nav-link text-white ps-0 fs-4" href="{% url 'login' %}?next={% url 'bledevices:all' %}">
+        <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
+        Login
+      </a>
+    {% endif %}
+    </div>
+  </div>
+</nav>
+<div class="b-example-divider d-none d-sm-block" style="width:0.1rem;"></div>
 {% endblock %}
 {% block content %}
-<div class="container d-flex flex-column" style="overflow-x: hidden;overflow-y: auto;">
+<div class="container d-flex flex-column mt-5 mt-sm-1" style="overflow-x: hidden;overflow-y: auto;">
   {% block main_page %}
   {% endblock %}
 </div>

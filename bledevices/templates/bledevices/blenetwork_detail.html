@@ -1,15 +1,13 @@
 {% extends "base_nav.html" %}
 {% load humanize %}
-{% block content %}
+{% block main_page %}
 <span style="float: right;">
 {% if blenetwork.owner == user %}
 <a href="{% url 'bledevices:blenetwork_update' blenetwork.id %}"><i class="fa fa-pencil"></i></a>
 <a href="{% url 'bledevices:blenetwork_delete' blenetwork.id %}"><i class="fa fa-trash"></i></a>
 {% endif %}
 </span>
-<h1 class="text-center">{{ blenetwork.name }}</h1>
-<p>
-</p>
+<h1 class="text-center mt-2">{{ blenetwork.name }}</h1>
 <p>
 {% if connected_devices %}
 <div class="container">

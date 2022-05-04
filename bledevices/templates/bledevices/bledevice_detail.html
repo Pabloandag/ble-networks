@@ -22,17 +22,17 @@
 </style>
 <link rel="stylesheet" type="text/css" href="{% static 'bledevices/css/morris.css' %}">
 {% endblock head %}
-{% block content %}
+{% block main_page %}
 <div class="container" style="flex-direction: column;">
 <span style="float: right;">
-({{ bledevice.updated_at|naturaltime }})
+<div class="mt-2">(Updated {{ bledevice.updated_at|naturaltime }})</div>
 {% if bledevice.owner == user %}
 <a href="{% url 'bledevices:bledevice_update' bledevice.id %}"><i class="fa fa-pencil"></i></a>
 <a href="{% url 'bledevices:bledevice_delete' bledevice.id %}"><i class="fa fa-trash"></i></a>
 {% endif %}
 </span>
 <br>
-<h1 class="text-center">{{ bledevice.friendly_name }}</h1>
+<h1 class="text-center mt-2">{{ bledevice.friendly_name }}</h1>
 
 <div class="row">
     <!-- Device info -->
@@ -41,56 +41,64 @@
             <div class="card-header">
                 <h5> Device info </h5>
             </div>
-            <div class="card-block border-bottom">
-                <div class="row">
-                    <div class="col">
-                        <div class="row d-flex align-items-center">
-                            <div class="col-auto">
-                                <i class="feather icon-user" style="font-size:30px;color:var(--bs-blue)"></i>
-                            </div>
-                            <div class="col">
-                                <h3 class="info-text">{{bledevice.identifier}}</h3>
-                                <span class="d-block text-uppercase info-title text-muted">DEVICE IDENTIFIER</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="row d-flex align-items-center">
-                            <div class="col-auto">
-                                <i class="feather icon-help-circle" style="font-size:30px;color:var(--bs-blue)"></i>
-                            </div>
-                            <div class="col">
-                                <h3 class="info-text">{{bledevice.device_type}}</h3>
-                                <span class="d-block text-uppercase info-title text-muted">DEVICE TYPE</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="card-block">
                 <div class="row">
                     <div class="col">
-                        <a href="{% url 'bledevices:network_detail' bledevice.network.id %}" style="text-decoration:none;color:black;">
-                            <div class="row d-flex align-items-center">
-                                <div class="col-auto">
-                                    <i class="feather icon-wifi" style="font-size:30px;color:var(--bs-blue)"></i>
-                                </div>
-                                <div class="col">
-                                    <h3 class="info-text">{{bledevice.network.name}}</h3>
-                                    <span class="d-block text-uppercase info-title text-muted">NETWORK NAME</span>
-                                </div>
-                            </div>
-                        </a>
+                        <div class="row-12">
+                                    <div class="col my-2">
+                                        <a href="/bledevices/network/1" style="text-decoration:none;color:black;">
+                                            <div class="row d-flex align-items-center">
+                                                <div class="col-auto">
+                                                    <i class="feather icon-user" style="font-size:30px;color:var(--bs-blue)"></i>
+                                                </div>
+                                                <div class="col">
+                                                    <h3 class="info-text">{{bledevice.identifier}}</h3>
+                                                    <span class="d-block text-uppercase info-title text-muted">DEVICE IDENTIFIER</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col my-2">
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-auto">
+                                                <i class="feather icon-help-circle" style="font-size:30px;color:var(--bs-blue)"></i>
+                                            </div>
+                                            <div class="col">
+                                                <h3 class="info-text">{{bledevice.device_type}}</h3>
+                                                <span class="d-block text-uppercase info-title text-muted">DEVICE TYPE</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </div>
                     </div>
                     <div class="col">
-                        <div class="row d-flex align-items-center">
-                            <div class="col-auto">
-                                <i class="feather icon-server" style="font-size:30px;color:var(--bs-blue)"></i>
-                            </div>
-                            <div class="col">
-                                <h3 class="info-text">{{bledevice.mac}}</h3>
-                                <span class="d-block text-uppercase info-title text-muted">DEVICE MAC</span>
-                            </div>
+                        <div class="row-12">
+                                    <div class="col my-2">
+                                        <a href="/bledevices/network/1" style="text-decoration:none;color:black;">
+                                            <div class="row d-flex align-items-center">
+                                                <div class="col-auto">
+                                                    <i class="feather icon-wifi" style="font-size:30px;color:var(--bs-blue)"></i>
+                                                </div>
+                                                <div class="col">
+                                                    <h3 class="info-text">{{bledevice.network.name}}</h3>
+                                                    <span class="d-block text-uppercase info-title text-muted">NETWORK NAME</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col my-2">
+                                        <a href="/bledevices/network/1" style="text-decoration:none;color:black;">
+                                            <div class="row d-flex align-items-center">
+                                                <div class="col-auto">
+                                                    <i class="feather icon-server" style="font-size:30px;color:var(--bs-blue)"></i>
+                                                </div>
+                                                <div class="col">
+                                                    <h3 class="info-text">{{bledevice.mac}}</h3>
+                                                    <span class="d-block text-uppercase info-title text-muted">DEVICE MAC</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
                         </div>
                     </div>
                 </div>
@@ -98,7 +106,7 @@
         </div>
     </div>
     <!-- Device Measurements -->
-    <div class="col-xl-6">
+    <div class="col-xl-6 mt-2 mt-xl-0">
         <div class="card h-100">
             <div class="card-header">
                 <h5> Device measurements </h5>

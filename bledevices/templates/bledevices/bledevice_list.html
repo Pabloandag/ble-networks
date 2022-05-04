@@ -1,7 +1,7 @@
 {% extends "base_nav.html" %}
 {% load humanize %}
-{% block content %}
-<h1 class="text-center">BLE Devices</h1>
+{% block main_page %}
+<h1 class="text-center mt-2">BLE Devices</h1>
 {% if bledevice_list %}
 <div class="row d-flex justify-content-center">
   {% for bledevice in bledevice_list %}
@@ -27,7 +27,7 @@
 {% else %}
   <p class="text-center">There are no BLE devices in the database.</p>
 {% endif %}
-{% endblock %}
+{% endblock main_page %}
 {% block footer %}
 <script>
   function toggle(event,url) {

@@ -1,0 +1,26 @@
+:root {
+    --emphasis: #0353A4;
+    --dark: #14213D;
+    --light-grey: #626A69;
+    --light:#E5E5E5;
+  }
+
+.dark{
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: var(--emphasis);
+}
+.nav-pills a:hover{
+    background-color: var(--emphasis);
+}
+body{
+    background-color: var(--light);
+}
+
+.navbar .navbar-brand{
+    color: white;
+}

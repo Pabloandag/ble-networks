@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'bledevices.apps.BledevicesConfig',
     'home.apps.HomeConfig',
+    'portfolio.apps.PortfolioConfig'
 ]
 
 MIDDLEWARE = [
@@ -131,3 +132,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 APP_NAME = 'BLE Management'
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
